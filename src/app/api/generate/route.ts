@@ -53,6 +53,6 @@ export async function POST(req: Request) {
     if (error instanceof Error) {
       return new Response(error.message, { status: 500 });
     }
-    return new Response("An unknown error occurred", { status: 500 });
+    return new Response("An unknown error occurred.", { status: 500 });
   }
 }
