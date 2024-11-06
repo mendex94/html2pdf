@@ -64,7 +64,7 @@ export async function POST(req: Request) {
       status: 200,
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition": "attachment; filename=download.pdf",
+        "Content-Disposition": "attachment; filename=certificate.pdf",
       },
     });
   } catch (error) {
