@@ -1,6 +1,8 @@
 import { generatePDFInputSchema } from "@/lib/validation-schema";
 import { env } from "@/utils/env";
 import puppeteer from "puppeteer";
+import puppeteerCore from "puppeteer-core";
+import chromium from "@sparticuz/chromium";
 
 export async function POST(req: Request) {
   const token = req.headers.get("Authorization");
@@ -17,9 +19,22 @@ export async function POST(req: Request) {
   }
 
   try {
-    const browser = await puppeteer.launch({
-      headless: true,
-    });
+    let browser;
+
+    if (process.env.VERCEL_ENV === "production") {
+      const executablePath = await chromium.executablePath();
+      browser = await puppeteerCore.launch({
+        executablePath,
+        args: chromium.args,
+        headless: chromium.headless,
+        defaultViewport: chromium.defaultViewport,
+      });
+    } else {
+      browser = await puppeteer.launch({
+        headless: true,
+        args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      });
+    }
 
     const page = await browser.newPage();
 
