@@ -1,4 +1,4 @@
-import { generatePDFInputSchema } from "@/lib/validation-schema";
+import { generateImageInputSchema } from "@/lib/validation-schema";
 import { env } from "@/utils/env";
 import puppeteer from "puppeteer";
 import puppeteerCore from "puppeteer-core";
@@ -15,7 +15,7 @@ export async function POST(req: Request) {
   }
 
   const requestBody = await req.json();
-  const { data, error } = generatePDFInputSchema.safeParse(requestBody);
+  const { data, error } = generateImageInputSchema.safeParse(requestBody);
 
   if (error || !data) {
     return new Response(error.message, { status: 400 });
@@ -51,20 +51,19 @@ export async function POST(req: Request) {
       waitUntil: "networkidle0",
     });
 
-    const pdf = await page.pdf({
-      format: "A4",
-      landscape: true,
-      printBackground: true,
-      preferCSSPageSize: true,
+    const certificate = await page.screenshot({
+      type: "jpeg",
+      quality: 100,
+      fullPage: true,
     });
 
     await browser.close();
 
-    return new Response(pdf, {
+    return new Response(certificate, {
       status: 200,
       headers: {
-        "Content-Type": "application/pdf",
-        "Content-Disposition": "attachment; filename=certificate.pdf",
+        "Content-Type": "image/jpeg",
+        "Content-Disposition": "attachment; filename=certificate.jpg",
       },
     });
   } catch (error) {
