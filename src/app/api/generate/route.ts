@@ -52,8 +52,7 @@ export async function POST(req: Request) {
     });
 
     const certificate = await page.screenshot({
-      type: "jpeg",
-      quality: 100,
+      type: "png",
       fullPage: true,
     });
 
@@ -62,8 +61,8 @@ export async function POST(req: Request) {
     return new Response(certificate, {
       status: 200,
       headers: {
-        "Content-Type": "image/jpeg",
-        "Content-Disposition": "attachment; filename=certificate.jpg",
+        "Content-Type": "image/png",
+        "Content-Disposition": "attachment; filename=certificate.png",
       },
     });
   } catch (error) {
