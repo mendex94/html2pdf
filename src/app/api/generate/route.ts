@@ -44,7 +44,7 @@ export async function POST(req: Request) {
     await page.setViewport({
       width: Math.floor((297 * 96) / 25.4),
       height: Math.floor((210 * 96) / 25.4),
-      deviceScaleFactor: 2,
+      deviceScaleFactor: 1,
     });
 
     await page.goto(data.url, {
